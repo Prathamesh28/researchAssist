@@ -64,3 +64,13 @@ class ResearchVectorDB:
         print("🔹 Example chunk:", docs[0].page_content[:200])
         
         return FAISS.from_documents(docs, self.embeddings)
+
+
+# Add at the end of vectordb.py
+class IndexerAgent:
+    """Agent that wraps ResearchVectorDB for indexing papers."""
+    def __init__(self):
+        self.indexer = ResearchVectorDB()
+
+    def run(self, papers):
+        return self.indexer.index_papers(papers)

@@ -1,61 +1,59 @@
-import streamlit as st
-from data_loader import MultiSourcePaperLoader
-from vectordb import ResearchVectorDB
-from rag_agent import RAGResearchAgent
+from data_loader import RetrieverAgent
+from vectordb import IndexerAgent
+from rag_agent import ReviewerAgent, PlannerAgent, CoderAgent
 from config_loader import load_config
-from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
+import streamlit as st
 
 config = load_config()
 
 def main():
-    st.title("Academic Research Assistant")
-    
+    st.title("Multi-Agent Academic Research Assistant")
+
     query = st.text_input("Enter your research question:")
-    # query = "What are the loss functions used in CNN modelling for face detection?"
+    max_papers = st.slider("Max papers to fetch", min_value=1, max_value=30, value=config["processing"]["max_papers"])
+
     if not query:
         return
-    
-    with st.spinner("🔍 Searching arXiv..."):
-        loader = MultiSourcePaperLoader(semantic_api_key=None) 
-        papers = loader.fetch_papers(query)[:config["processing"]["max_papers"]]
-        
-        if not papers:
-            st.error("No papers found. Try a different query.")
-            return
-        print(f"Number of papers : {len(papers)}")
-        for p in papers:
-            print(f"Title: {p['title']}")
-            print(f"Authors: {p['authors']}")
-            print(f"Year: {p['year']}")
-            print(f"URL: {p['pdf_url']}")
-            print(f"Full Text: {p['full_text'][:100]}")
 
-        import os
+    if st.button("Run Pipeline"):
+        # 1. Retrieve papers
+        with st.spinner("🔍 Retrieving papers..."):
+            retriever = RetrieverAgent()
+            papers = retriever.run(query, max_papers=max_papers)
+            st.success(f"Retrieved {len(papers)} papers.")
+            for p in papers:
+                st.caption(f"{p.get('title')} ({p.get('year')}) - {p.get('pdf_url')}")
 
-        # if os.path.exists("vector_store"):
-        #     embeddings = HuggingFaceEmbeddings(
-        #         model_name="sentence-transformers/all-MiniLM-L6-v2",  # Fast & small
-        #         model_kwargs={"device": "cpu"},  # or "mps" for Apple Silicon
-        #         encode_kwargs={"normalize_embeddings": True}
-        #     )
-        #     vector_db = FAISS.load_local("vector_store", embeddings, allow_dangerous_deserialization=True)
-        # else:
-        vector_db = ResearchVectorDB().index_papers(papers)
-            # vector_db.save_local("vector_store")
+        # 2. Index papers
+        with st.spinner("📚 Indexing papers..."):
+            indexer = IndexerAgent()
+            vector_db = indexer.run(papers)
+            st.success("Indexing complete.")
 
-        print("Vector store saved and loaded.")
-        agent = RAGResearchAgent(vector_db)
-        
-        with st.spinner("📚 Analyzing papers..."):
-            response = agent.query(query)
-            print(response) 
-            
-        st.markdown(response["answer"])
-        st.divider()
-        st.subheader("📚 Sources")
-        for source in response["sources"]:
-            st.caption(f"- {source}")
+        # 3. Literature review
+        with st.spinner("🧠 Reviewing literature..."):
+            reviewer = ReviewerAgent(vector_db)
+            review = reviewer.run(query)
+            st.subheader("Literature Review")
+            st.write(review["answer"])
+            st.caption("Sources:")
+            for s in review["sources"]:
+                st.caption(s)
+
+        # 4. Experiment planning
+        with st.spinner("📝 Planning experiment..."):
+            planner = PlannerAgent()
+            plan = planner.plan_experiment(review["answer"])
+            st.subheader("Experiment Plan")
+            st.write(plan)
+
+        # 5. Code generation
+        with st.spinner("💻 Generating starter code..."):
+            coder = CoderAgent()
+            code_files = coder.generate_code(plan, out_dir=config.get("processing", {}).get("out_dir", "generated_code"))
+            st.subheader("Generated Code")
+            st.code(code_files["experiment.py"], language="python")
+            st.success(f"Code saved to: {code_files['path']}")
 
 if __name__ == "__main__":
     main()

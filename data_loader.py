@@ -169,6 +169,16 @@ class MultiSourcePaperLoader:
 
         return unique_results
 
+# Add at the end of data_loader.py
+class RetrieverAgent:
+    """Agent that wraps MultiSourcePaperLoader for paper retrieval."""
+    def __init__(self, semantic_api_key: str = None):
+        self.loader = MultiSourcePaperLoader(semantic_api_key=semantic_api_key)
+
+    def run(self, query: str, max_papers: int = 10):
+        return self.loader.fetch_papers(query, max_results=max_papers)
+
+
 # ---------------- Example usage ----------------
 # if __name__ == "__main__":
 #     loader = MultiSourcePaperLoader(semantic_api_key=None)  # Add key if available
