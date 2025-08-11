@@ -1,0 +1,23 @@
+# Ollama Configuration
+ollama:
+  base_url: "http://localhost:11434"
+  model_name: "llama3.1:8b-instruct-q5_K_M"
+  temperature: 0.0
+  num_ctx: 65536
+  top_k: 20
+
+# Embedding Model Settings
+embedding:
+  model_name: "BAAI/bge-small-en-v1.5"
+  device: "mps"
+  normalize_embeddings: true
+
+# Processing Parameters
+processing:
+  max_papers: 10
+  chunk_size: 1024
+  chunk_overlap: 64
+  separators: 
+    - "\n\n"
+    - "\n"
+    - "(?<=\\. )"  # Fixed: Double backslash for regex
