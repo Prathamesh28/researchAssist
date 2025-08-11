@@ -1,4 +1,3 @@
-
 # ResearchAssist – AI-Powered Literature Review Assistant
 
 ## 📌 Overview
@@ -23,63 +22,72 @@ This tool drastically reduces the time spent on finding, reading, and summarizin
 
 ## 🛠 Tech Stack
 - **Python 3.10+**
-- **LangChain** – Vector store, RAG pipeline  
-- **FAISS** – Efficient semantic search  
-- **SentenceTransformers** – Paper embeddings (`all-MiniLM-L6-v2`)  
-- **Ollama** – Local LLaMA 3 inference  
-- **Streamlit** – Interactive UI  
+- **LangChain** – Document processing & retrieval  
+- **FAISS** – Vector database for semantic search  
+- **HuggingFace Embeddings** – Sentence-transformers for text embeddings  
+- **Ollama + LLaMA 3** – Local LLM for Q&A  
 - **PyMuPDF (fitz)** – PDF parsing  
-- **scholarly / arxiv API / Semantic Scholar API** – Paper search  
+- **Scholarly, arxiv, Semantic Scholar API** – Paper fetching  
 
 ---
 
 ## 📂 Project Structure
-\`\`\`
+```
 researchAssist/
-│── app.py                # Streamlit UI
-│── data_loader.py        # Fetch papers from multiple sources
-│── vectordb.py           # FAISS vector store builder
-│── rag_agent.py          # RAG pipeline with LLaMA
-│── llm.py                # LLaMA model loader
-│── config_loader.py      # Config management
-│── requirements.txt
-│── README.md
-\`\`\`
+│── app.py                 # Streamlit frontend for user interaction
+│── data_loader.py         # Multi-source research paper fetching
+│── vectordb.py            # FAISS vector database creation & indexing
+│── rag_agent.py           # RAG pipeline for AI-powered Q&A
+│── llm.py                  # Ollama LLaMA model integration
+│── config_loader.py       # Loads configuration settings
+│── requirements.txt       # Python dependencies
+│── README.md              # Project documentation
+```
 
 ---
 
 ## ⚙️ Installation
-\`\`\`bash
-# Clone repository
+
+1️⃣ **Clone the Repository**
+```bash
 git clone https://github.com/Prathamesh28/researchAssist.git
 cd researchAssist
+```
 
-# Install dependencies
+2️⃣ **Create Virtual Environment**
+```bash
+python -m venv venv
+source venv/bin/activate   # On Mac/Linux
+venv\Scripts\activate    # On Windows
+```
+
+3️⃣ **Install Dependencies**
+```bash
 pip install -r requirements.txt
+```
 
-# Run Ollama server locally
-ollama serve
+4️⃣ **Install Ollama & LLaMA**
+- Download Ollama from [https://ollama.ai](https://ollama.ai)  
+- Pull LLaMA 3 model:
+```bash
+ollama pull llama3
+```
 
-# Start the Streamlit app
+---
+
+## ▶️ Running the App
+```bash
 streamlit run app.py
-\`\`\`
+```
 
 ---
 
-## 💡 Usage
-1. Enter a **research question** in the UI  
-2. The system searches for relevant papers and downloads PDFs  
-3. Papers are split into **chunks**, embedded, and indexed in FAISS  
-4. AI retrieves relevant context and answers your question with **citations**  
-
----
-
-## 📈 Impact
-- Saves **hours of manual reading** by instantly summarizing relevant papers  
-- Improves **research quality** with context-backed AI answers  
-- Scales to **any research domain** without retraining  
+## 💡 Example Queries
+- *"What are the loss functions used in CNN modelling for face detection?"*  
+- *"Recent advancements in few-shot learning for NLP"*  
+- *"How diffusion models are applied in image segmentation"*  
 
 ---
 
 ## 📜 License
-MIT License – Free to use and modify.
+MIT License © 2025 Prathamesh Wagh
