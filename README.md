@@ -11,7 +11,7 @@ This tool drastically reduces the time spent on finding, reading, and summarizin
 
 ---
 ## Demo
-<video src="researchProjectDemo.mp4" controls width="600"></video>
+<video src="https://prathamesh28.github.io/researchAssist/researchProjectDemo.mp4" controls width="600"></video>
 
 ---
 
