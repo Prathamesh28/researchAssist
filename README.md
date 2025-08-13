@@ -10,6 +10,10 @@
 This tool drastically reduces the time spent on finding, reading, and summarizing research papers, enabling faster **idea validation** and **knowledge discovery**.
 
 ---
+## Demo
+<video src="researchProjectDemo.mp4" controls width="600"></video>
+
+---
 
 ## 🚀 Features
 - 🔍 **Multi-source Search** – Fetch papers from **arXiv**, **Semantic Scholar**, and **Google Scholar**  
