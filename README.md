@@ -11,8 +11,7 @@ This tool drastically reduces the time spent on finding, reading, and summarizin
 
 ---
 ## Demo
-[Click here for DEMO
-]([https://prathamesh28.github.io/researchAssist/](https://prathamesh28.github.io/researchAssist/researchProjectDemo.mp4))
+https://prathamesh28.github.io/researchAssist/researchProjectDemo.mp4
 ---
 
 ## 🚀 Features
